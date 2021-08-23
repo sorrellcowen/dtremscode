@@ -19,8 +19,8 @@ library(dismo)
 library(landscapemetrics)
 library(dplyr)
 library(stringr)
-
-
+library(rgeos)
+library(geosphere)
 
 
 # Load some (coarse) country background data
@@ -69,7 +69,7 @@ plot(st_geometry(plots_bats_jari), add=TRUE, col='black', pch=4, cex=0.6)
 
 
 
-##### MEXICO MAMMALS SITES #####
+##### MEXICO SITES #####
  
 
 setwd("C:/Users/solco/OneDrive/TFE/FINAL PROJECT WORK/Mammal_BioFrag_Data")
@@ -108,47 +108,6 @@ plot(st_geometry(sites_region), add=TRUE, col='red')
 plots_mammals_mexico <- st_as_sf(plots_mammals_mexico, coords=c('Longitude', 'Latitude'))
 st_crs(plots_mammals_mexico) <- 4326
 plot(st_geometry(plots_mammals_mexico), add=TRUE, col='black', pch=4, cex=0.6)
-
-
-
-##### MEXICO BATS SITES #####
-
-
-setwd("C:/Users/solco/OneDrive/TFE/FINAL PROJECT WORK/Mammal_BioFrag_Data")
-
-plots_bats_mexico <- read.csv("PID0093_Mexico_Bats/PID0093_Plot.csv")
-
-plots_bats_mexico <- st_as_sf(plots_bats_mexico, coords=c('Lon', 'Lat'))
-st_crs(plots_bats_mexico) <- 4326
-print(plots_bats_mexico)
-
-
-# Create a modelling extent for plotting and cropping the global data.
-model_extent <- extent(c(-92,-89,15,17))
-
-# Plot site data over map
-plot(st_geometry(sne110), xlim=model_extent[1:2], ylim=model_extent[3:4], 
-     bg='lightblue', col='ivory')
-plot(st_geometry(plots_bats_mexico), add=TRUE, col='red', pch=4, cex=0.6)
-box()
-
-
-#### Create a polygon around sites ####
-
-
-### create polygon around sites with 0.1 buffer
-sites_region <- st_as_sfc(st_bbox(plots_bats_mexico))
-sites_region <- st_buffer(sites_region, 0.1)
-
-### find min and max long and lat to use in google earth engine
-print(sites_region)
-
-## plot the polygon onto map
-plot(st_geometry(sites_region), add=TRUE, col='red')
-
-## plot the sites back on to make sure they all fall into polygon
-plot(st_geometry(plots_bats_mexico), add=TRUE, col='black', pch=4, cex=0.6)
-
 
 
 
@@ -233,24 +192,24 @@ plot(st_geometry(plots_bats_peru), add=TRUE, col='black', pch=4, cex=0.6)
 
 
 
-##### ARGENTINA SITES #####
+##### SAO PAULO SITES #####
 
 setwd("C:/Users/solco/OneDrive/TFE/FINAL PROJECT WORK/Mammal_BioFrag_Data")
 
-plots_mam_arg <- read.csv("PID0040_Argentinia_Mammals/PID0040_Plot.csv")
+plots_bats_saop <- read.csv("PID0222_Sao_Paulo_Bats/PID0222_Plot.csv")
 
-plots_mam_arg <- st_as_sf(plots_mam_arg, coords=c('Longitude', 'Latitude'))
-st_crs(plots_mam_arg) <- 4326
-print(plots_mam_arg)
+plots_bats_saop <- st_as_sf(plots_bats_saop, coords=c('Longitude', 'Latitude'))
+st_crs(plots_bats_saop) <- 4326
+print(plots_bats_saop)
 
 
 # Create a modelling extent for plotting and cropping the global data.
-model_extent <- extent(c(-72,-70,-41,-39))
+model_extent <- extent(c(-50,-45,-24,-19))
 
 # Plot site data over map
 plot(st_geometry(sne110), xlim=model_extent[1:2], ylim=model_extent[3:4], 
      bg='lightblue', col='ivory')
-plot(st_geometry(plots_mam_arg), add=TRUE, col='red', pch=4, cex=0.6)
+plot(st_geometry(plots_bats_saop), add=TRUE, col='red', pch=4, cex=0.6)
 box()
 
 
@@ -258,8 +217,9 @@ box()
 
 
 ### create polygon around sites with 0.1 buffer
-sites_region <- st_as_sfc(st_bbox(plots_mam_arg))
-sites_region <- st_buffer(sites_region, 0.1)
+sites_region <- st_as_sfc(st_bbox(plots_bats_saop))
+sites_region <- st_buffer(sites_region, 11000)
+
 
 ### find min and max long and lat to use in google earth engine
 print(sites_region)
@@ -268,4 +228,6 @@ print(sites_region)
 plot(st_geometry(sites_region), add=TRUE, col='red')
 
 ## plot the sites back on to make sure they all fall into polygon
-plot(st_geometry(plots_mam_arg), add=TRUE, col='black', pch=4, cex=0.6)
+plot(st_geometry(plots_bats_saop), add=TRUE, col='black', pch=4, cex=0.6)
+
+
